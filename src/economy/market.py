@@ -1,77 +1,110 @@
-from src.product import Product
-import warnings
+from typing import List
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from src.economy.product import Product
 
 
-class Party:
-    def __init__(self, name: str, product_list=None):
-        self.name = name
-        if not product_list:
-            self.products = {}
+class Environment:
+    def __init__(self):
+        return
 
-        # Create storage
-        self._storage = {}
-        if product_list:
-            for product in product_list:
-                if not isinstance(product, Product):
-                    raise ValueError(f"{product} is not instance of the Product class")
-                self._storage[product.name] = 0
+    def transform(self):
+        return
 
-    def __str__(self):
-        rt_str = f"{self.name}: {self.products}"
-        return rt_str
+    def unit(self):
+        return
 
-    # -------------------- Property -------------------- #
-    @property
-    def storage(self):
-        return self._storage
 
-    # -------------------- Public functions -------------------- #
-    def add_new_product(self, product: Product):
-        if self.products and product.name in self.products:
-            raise ValueError(f"Product {product.name} has already added in this party, "
-                             f"can not add product with similar name, please find another name")
-        self.products[product.name] = product
-        self._storage[product.name] = 0
+class Worker:
+    def __init__(self, products: list = [], resource_cost: list = []):
+        if products and resource_cost:
+            if len(products) == len(resource_cost):
+                self.products = list()
+                for p, v in zip(products, resource_cost):
+                    self.products.append([p, v])
+            else:
+                raise ValueError(f"Number of products and number of resource cost are not the same")
+        else:
+            self.products = list()
+            self.efficiency = list()
+        return
 
-    def add_product_to_storage(self, product_name: str, quantity: int = 1):
-        if isinstance(product_name, str) and quantity >= 1:
-            if product_name not in self._storage:
-                self._storage[product_name] = 0
-            self._storage[product_name] += quantity
+    def _init_product(self, products):
+        self.products = list()
+        for p in products:
+            self.products[p.name] = p
+        return self.products
 
-    def party_detail(self):
-        print(f"Party: {self.name}")
-        print(f"Product: ")
-        for key in self.products:
-            print(f" - {key}: {self.products[key]}")
-        print(f"{self.storage}")
+    def add_product(self, product, resource_cost):
+        self.products.append([product, resource_cost])
 
-    def sell(self, product, quantity: int = 1, buy_all: bool = True):
-        if product not in self.products:
-            raise ValueError(f"The party {self.name} doesn't not sell {product}")
-        if self._storage[product] - quantity < 0:
-            if buy_all:
-                quantity = self._storage[product]
-                self._storage[product] = 0
-                return product, quantity
+    def _dfs(self, nums, target, path, ret):
+        if target < 0:
+            return
+        if target == 0:
+            ret.append(path)
+            return
+        for i in range(len(nums)):
+            self._dfs(nums[i:], target - nums[i], path + [nums[i]], ret)
 
-        self._storage[product] -= quantity
-        return product, quantity
+    def _combination(self, candidates, target):
+        ret = []
+        self._dfs(candidates, target, [], ret)
+        return ret
 
-    def buy(self, product: str, party, quantity: int = 1):
-        if product not in party.products:
-            raise ValueError(f"{party.name} party doesn't have {product}")
-        if quantity <= 0:
-            raise ValueError(f"Quantity should be greater than or equal to 1")
+    def max_production(self, resource):
+        shape = (len(self.products), len(self.products))
+        production = np.zeros(shape)
 
-        # add products to storage
-        t_product, t_quantity = party.sell(product=product, quantity=quantity)
-        self.add_product_to_storage(product_name=t_product, quantity=t_quantity)
+        for i, p in enumerate(self.products):
+            cost = p[1]
+            production[i][i] = resource/cost
 
-    def produce(self, product_name: str, quantity: int = 1):
-        # TODO: Correct logic for production
-        # TODO: Add a class called Worker to handle the production
-        if product_name in self.products:
-            self._storage[product_name] += quantity
+        return production
 
+    def max_production_combination(self, resource):
+        combination_production = []
+        candidates = [p[1] for p in self.products]
+        com = self._combination(candidates, resource)
+
+        for c in com:
+            com_list = []
+            for can in candidates:
+                count = c.count(can)
+                com_list.append(count)
+            combination_production.append(com_list)
+
+        return np.array(combination_production)
+
+    def ppf(self, resource):
+        ppf_list = []
+
+        for p in self.products:
+            t_specilization = resource / p[1]
+            ppf_list.append(t_specilization)
+
+        return ppf_list
+
+    def ppf_points(self, time_span):
+        points = []
+
+        for p in self.products:
+            t_specilization = time_span / p[1]
+            point = np.zeros(len(self.products))
+            point[self.products.index(p)] = t_specilization
+            points.append(point)
+        return points
+
+    def ppf_matrix(self, time_span):
+        shape = (len(self.products), len(self.products))
+        matrix = np.zeros(shape)
+
+        for p in self.products:
+            t_specilization = time_span / p[1]
+            matrix[self.products.index(p)][self.products.index(p)] = t_specilization
+
+        return matrix
 

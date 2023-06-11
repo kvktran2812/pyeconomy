@@ -12,8 +12,6 @@ class Product:
         else:
             self.materials = materials
 
-        # mfg date and exp date
-        # TODO fix exp date, calculate from mfg date and lifetime
         self.mfg_date = datetime.date.today()
         self.exp_date = datetime.date.today()
 
