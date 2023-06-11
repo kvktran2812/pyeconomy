@@ -1,6 +1,6 @@
 import pytest
-from src.market import Party
-from src.product import Product
+from src.economy.market import Party
+from src.economy.product import Product
 
 
 @pytest.mark.parametrize(

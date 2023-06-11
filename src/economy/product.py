@@ -18,8 +18,9 @@ class Product:
         self.exp_date = datetime.date.today()
 
     def __str__(self):
-        return f"{self.lifetime} {self.materials}"
+        return self._product_detail()
 
-    def product_detail(self):
-        print(f"{self.lifetime} {self.materials}")
+    def _product_detail(self):
+        detail = f"{self.lifetime} {self.materials}"
+        return detail
 
