@@ -98,13 +98,14 @@ class Worker:
             points.append(point)
         return points
 
-    def ppf_matrix(self, time_span):
-        shape = (len(self.products), len(self.products))
-        matrix = np.zeros(shape)
-
-        for p in self.products:
-            t_specilization = time_span / p[1]
-            matrix[self.products.index(p)][self.products.index(p)] = t_specilization
-
-        return matrix
+    # TODO: remove this function
+    # def ppf_matrix(self, time_span):
+    #     shape = (len(self.products), len(self.products))
+    #     matrix = np.zeros(shape)
+    #
+    #     for p in self.products:
+    #         t_specilization = time_span / p[1]
+    #         matrix[self.products.index(p)][self.products.index(p)] = t_specilization
+    #
+    #     return matrix
 

@@ -1,14 +1,15 @@
 import numpy as np
 import pandas as pd
 import scipy as sp
+import math
 
 from src.economy.market import Worker
 import matplotlib.pyplot as plt
 from bokeh.plotting import figure, show
+import itertools as it
+
 
 # TODO: consider add Environment class to generalize unit value
-
-
 class PPF:
     def __init__(self, resource=0):
         self.workers = []
@@ -29,24 +30,51 @@ class PPF:
             p.line(ppf_line[:, 0], ppf_line[:, 1], line_width=2)
         show(p)
 
-    def _production_vector(self):
-        first_worker = self.workers[0]
-        n_workers = len(self.workers)
-        n_products = len(first_worker.products)
-
-        p_vec = np.zeros(shape=(n_workers, n_products))
+    def max_production_vector(self):
+        max_p_vec = []
 
         for i, w in enumerate(self.workers):
-            for j, p in enumerate(w.products):
-                p_vec[i, j] = p[1]
-        return p_vec
+            max_p_vec.append(w.max_production(self.resource))
+
+        return max_p_vec
 
     def ppf(self):
+        w_num = len(self.workers)
+        p_num = len(self.workers[0].products)
+        w_ppf = [w.ppf(self.resource) for w in self.workers]
+        product = it.product(range(p_num), repeat=w_num)
         ppf_arr = []
 
-        for w in self.workers:
-            for p in w.products:
-                print(p)
-            print(w.max_production(self.resource))
-        return
+        for p in product:
+            t_arr = [0] * p_num
+            for i, v in enumerate(p):
+                t_arr[v] += w_ppf[i][v]
+            ppf_arr.append(t_arr)
+        return ppf_arr
+
+    def most_efficient_ppf(self):
+        w_num = len(self.workers)
+        p_num = len(self.workers[0].products)
+        w_ppf = [w.ppf(self.resource) for w in self.workers]
+        product = it.product(range(p_num), repeat=w_num)
+        unique = dict()
+        ppf_arr = []
+
+        for p in product:
+            sorted_p = tuple(sorted(p))
+            t_arr = [0] * p_num
+            for i, v in enumerate(p):
+                t_arr[v] += w_ppf[i][v]
+
+            if sorted_p not in unique:
+                unique[sorted_p] = t_arr
+            else:
+                origin = [0] * p_num
+                new_distance = sp.spatial.distance.euclidean(origin, t_arr)
+                prev_distance = sp.spatial.distance.euclidean(origin, unique[sorted_p])
+                if new_distance > prev_distance:
+                    unique[sorted_p] = t_arr
+        for i in unique:
+            ppf_arr.append(unique[i])
+        return ppf_arr
 
