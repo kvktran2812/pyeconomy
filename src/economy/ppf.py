@@ -10,6 +10,7 @@ import itertools as it
 
 
 # TODO: consider add Environment class to generalize unit value
+# TODO: add docstring
 class PPF:
     def __init__(self, resource=0):
         self.workers = []

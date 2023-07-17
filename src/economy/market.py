@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from src.economy.product import Product
 
 
+# TODO: add docstring
 class Environment:
     def __init__(self):
         return
@@ -18,6 +19,7 @@ class Environment:
         return
 
 
+# TODO: add docstring
 class Worker:
     def __init__(self, products: list = [], resource_cost: list = []):
         if products and resource_cost:
@@ -97,15 +99,4 @@ class Worker:
             point[self.products.index(p)] = t_specilization
             points.append(point)
         return points
-
-    # TODO: remove this function
-    # def ppf_matrix(self, time_span):
-    #     shape = (len(self.products), len(self.products))
-    #     matrix = np.zeros(shape)
-    #
-    #     for p in self.products:
-    #         t_specilization = time_span / p[1]
-    #         matrix[self.products.index(p)][self.products.index(p)] = t_specilization
-    #
-    #     return matrix
 
