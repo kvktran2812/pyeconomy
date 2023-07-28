@@ -1,9 +1,8 @@
-from typing import List
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from bokeh.plotting import figure
+import bokeh.plotting as bokeh_plt
 from src.economy.product import Product
 
 
@@ -99,4 +98,91 @@ class Worker:
             point[self.products.index(p)] = t_specilization
             points.append(point)
         return points
+
+
+class Supply:
+    def __init__(self, price: list, quantity_supplied: list):
+        if type(price) != list or type(quantity_supplied) != list:
+            raise TypeError(f"price or quantity_supplied parameter should be a list")
+
+        if len(price) != len(quantity_supplied):
+            raise ValueError(f"price and quantity_supplied parameter must have the same size")
+
+        self.price = price
+        self.quantity_supplied = quantity_supplied
+        return
+
+    def __add__(self, other):
+        if len(self.price) != len(other.price):
+            raise ValueError(f"Size of the two demand class are not the same")
+
+        new_quantity_supplied = []
+
+        for i, v in enumerate(self.quantity_supplied):
+            d = v + other.quantity_supplied[i]
+            new_quantity_supplied.append(d)
+
+        new_supply = Supply(self.price, list(new_quantity_supplied))
+
+        return new_supply
+
+    def draw(self, show: bool = True, output="mpl"):
+        if output == "mpl":
+            f = plt.plot(self.quantity_supplied, self.price, color='red')
+
+            if show:
+                plt.show()
+            return f
+        elif output == "bokeh":
+            f = figure(title="Production possibility frontier", x_axis_label="x", y_axis_label="price")
+            f.line(self.price, self.quantity_supplied, color='red', line_width=2)
+
+            if show:
+                bokeh_plt.show(f)
+            return f
+        else:
+            raise ValueError(f"type parameter should be mpl or bokeh")
+
+
+class Demand:
+    def __init__(self, price: list, quantity_demanded: list):
+        self.price = price
+        self.quantity_demanded = quantity_demanded
+        return
+
+    def __add__(self, other):
+        if len(self.price) != len(other.price):
+            raise ValueError(f"Size of the two demand class are not the same")
+
+        new_quantity_demanded = []
+
+        for i, v in enumerate(self.quantity_demanded):
+            d = v + other.quantity_demanded[i]
+            new_quantity_demanded.append(d)
+
+        new_demand = Demand(self.price, list(new_quantity_demanded))
+
+        return new_demand
+
+    def draw(self, show: bool = True, output="mpl"):
+        if output == "mpl":
+            f = plt.plot(self.quantity_demanded, self.price, color='blue')
+
+            if show:
+                plt.show()
+            return f
+        elif output == "bokeh":
+            f = figure(title="Production possibility frontier", x_axis_label="x", y_axis_label="price")
+            f.line(self.price, self.quantity_demanded, color='blue', line_width=2)
+
+            if show:
+                bokeh_plt.show(f)
+            return f
+        else:
+            raise ValueError(f"type parameter should be mpl or bokeh")
+
+
+class Market:
+    def __init__(self):
+        return
 
