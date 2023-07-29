@@ -1,5 +1,7 @@
 import numpy as np
 import scipy as sp
+import matplotlib.pyplot as plt
+from bokeh.plotting import figure, show
 
 
 def index(variable):
@@ -21,4 +23,23 @@ def index(variable):
     else:
         raise TypeError(f"prices parameter is not iterable")
     return index_arr
+
+
+# TODO: Complete docstring
+def draw_supply_demand(supply, demand, output="mpl"):
+    """
+    Function to draw supply and demand graph
+
+    :param supply:
+    :param demand:
+    :return:
+    """
+    if output == "mpl":
+        supply.draw(show=False)
+        demand.draw(show=False)
+        plt.show()
+    elif output == "bokeh":
+        raise NotImplementedError("Option is not implemented")
+
+    return
 

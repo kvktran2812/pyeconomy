@@ -110,7 +110,6 @@ class Supply:
 
         self.price = price
         self.quantity_supplied = quantity_supplied
-        return
 
     def __add__(self, other):
         if len(self.price) != len(other.price):
@@ -131,6 +130,8 @@ class Supply:
             f = plt.plot(self.quantity_supplied, self.price, color='red')
 
             if show:
+                plt.xlabel("Quantity")
+                plt.ylabel("Price")
                 plt.show()
             return f
         elif output == "bokeh":
@@ -145,10 +146,18 @@ class Supply:
 
 
 class Demand:
+    """
+    Demand class represent the demand concept in economy
+    """
     def __init__(self, price: list, quantity_demanded: list):
+        if type(price) != list or type(quantity_demanded) != list:
+            raise TypeError(f"price or quantity_demanded parameter should be a list")
+
+        if len(price) != len(quantity_demanded):
+            raise ValueError(f"price and quantity_demanded parameter must have the same size")
+
         self.price = price
         self.quantity_demanded = quantity_demanded
-        return
 
     def __add__(self, other):
         if len(self.price) != len(other.price):
@@ -169,6 +178,8 @@ class Demand:
             f = plt.plot(self.quantity_demanded, self.price, color='blue')
 
             if show:
+                plt.xlabel("Quantity")
+                plt.ylabel("Price")
                 plt.show()
             return f
         elif output == "bokeh":
