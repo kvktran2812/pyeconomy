@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 from src.economy.elasticity.elasticity import *
 
 
@@ -20,5 +21,5 @@ def test_elasticity_result():
     price = list(range(10, -1, -1))
 
     e = percentage_change_elasticity(demand, price)
-    assert e == ['NaN', -9.0, -4.0, -2.3333333333333335, -1.5, -1.0, -0.6666666666666666, -0.42857142857142855, -0.25, -0.1111111111111111]
+    assert e == [np.Inf, -9.0, -4.0, -2.3333333333333335, -1.5, -1.0, -0.6666666666666666, -0.42857142857142855, -0.25, -0.1111111111111111]
     assert len(demand) == len(price)
