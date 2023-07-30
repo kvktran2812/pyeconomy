@@ -50,3 +50,65 @@ def test_linear_curve_function(series, a, b, c, result):
 def test_non_linear_function(series, a, b, result):
     value = linear_curve(series, a, b)
     assert value == result
+
+
+@pytest.mark.parametrize(
+    "series, base, result",
+    [
+        (
+            list(range(1, 100, 5)),
+            2,
+            [
+                0.0,
+                2.58,
+                3.46,
+                4.0,
+                4.39,
+                4.7,
+                4.95,
+                5.17,
+                5.36,
+                5.52,
+                5.67,
+                5.81,
+                5.93,
+                6.04,
+                6.15,
+                6.25,
+                6.34,
+                6.43,
+                6.51,
+                6.58,
+            ],
+        ),
+        (
+            list(range(1, 100, 5)),
+            5,
+            [
+                0.0,
+                1.11,
+                1.49,
+                1.72,
+                1.89,
+                2.02,
+                2.13,
+                2.23,
+                2.31,
+                2.38,
+                2.44,
+                2.5,
+                2.55,
+                2.6,
+                2.65,
+                2.69,
+                2.73,
+                2.77,
+                2.8,
+                2.84,
+            ],
+        ),
+    ],
+)
+def test_logarithm_curve(series, base, result):
+    value = logarithm_curve(series, base)
+    assert value == result

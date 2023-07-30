@@ -37,3 +37,18 @@ def linear_curve(series, a, b, round_number=2):
         line.append(round(y, round_number))
     return line
 
+
+def logarithm_curve(series, base, round_number=2):
+    """
+    Logarithm function
+
+    :param series:
+    :param base:
+    :param round_number:
+    :return:
+    """
+    curve = []
+    for x in series:
+        y = math.log(x, base)
+        curve.append(round(y, 2))
+    return curve
