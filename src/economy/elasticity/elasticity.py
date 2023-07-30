@@ -3,11 +3,13 @@ from src.economy.market import Demand, Supply
 
 def percentage_change_elasticity(p_change_val1, p_change_val2):
     """
-    
+
     :param p_change_val1:
     :param p_change_val2:
     :return:
     """
+    if type(p_change_val1) is not list or type(p_change_val2) is not list:
+        raise TypeError("The type of the two value provided must be a list")
     if not len(p_change_val2) == len(p_change_val1):
         raise ValueError("Size of the two value are not the same")
 
