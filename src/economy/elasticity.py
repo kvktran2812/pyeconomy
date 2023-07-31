@@ -1,5 +1,6 @@
 from src.economy.market import Demand, Supply
 import numpy as np
+import math
 
 
 def percentage_change_elasticity(p_change_val1, p_change_val2):
@@ -28,4 +29,16 @@ def percentage_change_elasticity(p_change_val1, p_change_val2):
         elasticity.append(e_val)
 
     return elasticity
+
+
+def is_elasticity(elasticity):
+    """
+    Check if value is elastic or inelastic
+
+    :param elasticity:
+    :return:
+    """
+
+    arr = [True if abs(e) > 1 else False for e in elasticity]
+    return arr
 
