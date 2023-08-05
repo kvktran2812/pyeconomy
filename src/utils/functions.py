@@ -16,6 +16,9 @@ def non_linear_curve(series, a, b, c, round_number=2):
     """
     curve = []
     for x in series:
+        if x == 0:
+            curve.append(np.Inf)
+            continue
         y = (a/x + c)*b
         curve.append(round(y, round_number))
     return curve
@@ -52,3 +55,31 @@ def logarithm_curve(series, base, round_number=2):
         y = math.log(x, base)
         curve.append(round(y, 2))
     return curve
+
+
+# TODO: Check usefulness of this function
+def shift(series, value=0):
+    """
+    Increase or decrease all of the series member value by the value provided
+
+    :param series:
+    :param value:
+    :return:
+    """
+    if value == 0:
+        return series
+    return [x+value for x in series]
+
+
+# TODO: Check usefulness of this function
+def percentage_change(series, percentage=0):
+    """
+    Increase or decrease all of the series member value by a percentage provided
+
+    :param series:
+    :param percentage:
+    :return:
+    """
+    if percentage == 0:
+        return series
+    return [x+(x*percentage/100) for x in series]
