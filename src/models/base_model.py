@@ -8,25 +8,24 @@ class LinearModel:
     def __init__(self):
         self.data = {}
         self.steps = []
+        self.verbal = False
 
     def run(self):
         for s in self.steps:
-            args = self.get_data(s["inputs"])
+            args = self._get_data(s["inputs"])
             f = s["function"]
-            output = f(*args)
-
-            if len(s["outputs"]) == 1:
-                self.data[s["outputs"][0]] = output
-            else:
-                for i, v in enumerate(s["outputs"]):
-                    self.data[v] = output[i]
+            outputs = f(*args)
+            self._save_data(outputs, s["outputs"])
 
     def log(self):
         return
 
-    def _save_data(self):
-
-        return
+    def _save_data(self, outputs, name):
+        if len(name) == 1:
+            self.data[name[0]] = outputs
+        else:
+            for i, v in enumerate(name):
+                self.data[v] = outputs[i]
 
     def _get_data(self, inputs):
         args = []
