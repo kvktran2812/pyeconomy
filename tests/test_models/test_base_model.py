@@ -16,10 +16,16 @@ def test_base_model_init():
     "function, inputs, outputs, results",
     [
         (
-            shift,
+            translation,
             ["data", 5],
             ["data_1"],
-            [{"function": shift, "inputs": ["data", 5], "outputs": ["data_1"]}],
+            [{"function": translation, "inputs": ["data", 5], "outputs": ["data_1"]}],
+        ),
+        (
+            translation,
+            ["data", 5],
+            "data_1",
+            [{"function": translation, "inputs": ["data", 5], "outputs": "data_1"}],
         ),
         (
             percentage_change,
@@ -47,3 +53,18 @@ def test_model_add_step(function, inputs, outputs, results):
         assert f == results[i]["function"]
         assert inp == results[i]["inputs"]
         assert out == results[i]["outputs"]
+
+
+@pytest.mark.parametrize(
+    "function, inputs, outputs, error_msg",
+    [
+        (1, ["data"], ["data"], "Error: function parameter is not callable, can not add this step"),
+        (translation, 1, ["data"], "Error: inputs parameter is not iterable, can not add this step"),
+        (translation, ["data"], 1, "Error: outputs parameter is not iterable or string, can not add this step"),
+    ]
+)
+def test_model_add_step_error(function, inputs, outputs, error_msg):
+    model = LinearModel()
+
+    with pytest.raises(ValueError, match=error_msg):
+        model.add_step(function, inputs, outputs)
