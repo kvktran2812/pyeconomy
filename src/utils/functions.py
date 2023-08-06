@@ -58,7 +58,7 @@ def logarithm_curve(series, base, round_number=2):
 
 
 # TODO: Check usefulness of this function
-def shift(series, value=0):
+def translation(series, value=0):
     """
     Increase or decrease all of the series member value by the value provided
 
