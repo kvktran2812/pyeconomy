@@ -66,6 +66,8 @@ def translation(series, value=0):
     :param value:
     :return:
     """
+    if type(series) is not list and type(series) is not np.ndarray:
+        raise TypeError("Type of series is not list or np.ndarray")
     if value == 0:
         return series
     return [x+value for x in series]

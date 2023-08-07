@@ -1,7 +1,6 @@
-import abc
-from abc import ABC
 import networkx as nx
 import logging
+from src.utils.log import ModelLogger
 
 
 # TODO: Add docstring
@@ -14,6 +13,20 @@ class LinearModel:
         self.data = {}
         self.steps = []
         self.verbal = False
+        self.log = {
+            "errors": [],
+        }
+
+        self.logger = ModelLogger(name=self.name())
+
+    def name(self):
+        """
+        Function to return the name of the model
+
+        :return: unique str
+        :rtype: str
+        """
+        return f"LModel {id(self)}"
 
     def run(self):
         """
@@ -23,14 +36,47 @@ class LinearModel:
         :return: nothing
         :rtype: None
         """
-        for s in self.steps:
+        for i, s in enumerate(self.steps):
+            outputs = None
+            status = 0
+
             args = self._get_data(s["inputs"])
             f = s["function"]
-            outputs = f(*args)
+            try:
+                outputs = f(*args)
+            except Exception as e:
+                self._add_error(e, i+1)
+                status = 1
+            if status == 1:
+                self.logger.error(f"Step {i+1:>3}: Failed to add this step")
             self._save_data(outputs, s["outputs"])
 
     def log(self):
         return
+
+    @property
+    def no_step(self):
+        return len(self.steps)
+
+    def _add_error(self, error, step):
+        """
+        Helper function to add error to log for debugging
+
+        :param error: error to be added
+        :type error: Exception
+        :param step: the index of the step where the error occur
+        :type step: int
+        :return: nothing
+        :rtype: None
+        """
+        if not isinstance(error, Exception):
+            raise TypeError("Input error is not of exception type")
+        error_info = {
+            "step": step,
+            "type": type(error),
+            "error": error.__str__(),
+        }
+        self.log["errors"].append(error_info)
 
     def _save_data(self, outputs, name):
         """
@@ -114,5 +160,3 @@ class LinearModel:
             self.steps.append(step)
         else:
             raise ValueError(f"Error: {msg}, can not add this step")
-
-
