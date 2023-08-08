@@ -1,5 +1,7 @@
 import pytest
 from src.utils.log import *
+import os
+from pathlib import Path
 
 
 def test_custom_formatter():
@@ -10,6 +12,7 @@ def test_custom_formatter():
     assert CustomFormatter.reset == "\x1b[0m"
 
 
+# TODO: clear and remove log file or make it log somewhere else
 @pytest.mark.parametrize(
     "name, file_handler, no_handler",
     [

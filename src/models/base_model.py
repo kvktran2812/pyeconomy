@@ -3,12 +3,13 @@ import logging
 from src.utils.log import ModelLogger
 
 
-# TODO: Add docstring
+# TODO: Maybe add logging run time for each step?
 class LinearModel:
     """
     A linear model class is used to represent computing of economic model. The computation is base on the steps of the
     model, linearly from inputs step by step to outputs.
     """
+
     def __init__(self):
         self.data = {}
         self.steps = []
@@ -45,7 +46,7 @@ class LinearModel:
             try:
                 outputs = f(*args)
             except Exception as e:
-                self._add_error(e, i+1)
+                self._add_error(e, i + 1)
                 status = 1
             self._log_console(status, i)
             self._save_data(outputs, s["outputs"])
@@ -58,10 +59,11 @@ class LinearModel:
         :param step:
         :return:
         """
-        if status == 1:
-            self.logger.error(f"Step {step + 1}: Failed")
-        if status == 0:
-            self.logger.info(f"Step {step + 1}: Run successfully")
+        if self.verbal:
+            if status == 1:
+                self.logger.error(f"Step {step + 1}: Failed")
+            if status == 0:
+                self.logger.info(f"Step {step + 1}: Run successfully")
         return
 
     @property
