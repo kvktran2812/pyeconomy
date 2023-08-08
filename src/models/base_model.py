@@ -47,11 +47,21 @@ class LinearModel:
             except Exception as e:
                 self._add_error(e, i+1)
                 status = 1
-            if status == 1:
-                self.logger.error(f"Step {i+1:>3}: Failed to add this step")
+            self._log_console(status, i)
             self._save_data(outputs, s["outputs"])
 
-    def log(self):
+    def _log_console(self, status, step):
+        """
+        Helper function for logging to the console
+
+        :param status:
+        :param step:
+        :return:
+        """
+        if status == 1:
+            self.logger.error(f"Step {step + 1}: Failed")
+        if status == 0:
+            self.logger.info(f"Step {step + 1}: Run successfully")
         return
 
     @property
