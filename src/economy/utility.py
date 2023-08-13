@@ -1,5 +1,6 @@
 import numpy as np
 from src.utils.functions import percentage_relative_change
+import matplotlib.pyplot as plt
 
 
 # TODO: Check for type of utility
@@ -17,6 +18,12 @@ def percentage_reduced_utility_model(utility, percentage, num=0):
 
 
 def amount_reduced_utility_model(utility, amount):
+    """
+
+    :param utility:
+    :param amount:
+    :return:
+    """
     if type(utility) is np.ndarray:
         return utility - amount
     elif type(utility) is list:
@@ -26,10 +33,12 @@ def amount_reduced_utility_model(utility, amount):
         return arr
     else:
         raise TypeError(f"Utility is not of type list or np.ndarray")
-    return
 
 
 class Utility:
+    """
+    Class to represent utility
+    """
     def __init__(self, units, total_utility, price_per_unit):
         if self._validate_input(total_utility, units, price_per_unit):
             self.total_utility = total_utility
@@ -40,6 +49,14 @@ class Utility:
 
     @staticmethod
     def _validate_input(utility, units, price_per_unit):
+        """
+        Helper function to validate inputs to Utility class
+
+        :param utility:
+        :param units:
+        :param price_per_unit:
+        :return:
+        """
         if type(utility) is not list and type(utility) is not np.ndarray:
             raise TypeError(f"utility value is not list or np.ndarray")
         if type(units) is not list and type(units) is not np.ndarray:
@@ -67,5 +84,44 @@ class Utility:
             i += 1
 
     # TODO: implement this function
-    def convert_to_demand(self):
+    def to_demand_class(self):
         return
+
+    # TODO: implement this function
+    def to_demand_array(self):
+        return
+
+    def draw_total_utility(self, show=True):
+        """
+        Visualization function for total utility
+
+        :param show:
+        :return:
+        """
+        plt.plot(self.units, self.total_utility)
+        if show:
+            plt.show()
+
+    def draw_marginal_utility(self, show=True):
+        """
+        Visualization function marginal utility
+
+        :param show:
+        :return:
+        """
+        plt.plot(self.units, self.marginal_utility)
+        if show:
+            plt.show()
+
+    def draw(self, show=True):
+        """
+        Visualization function for all utility features
+
+        :param show:
+        :return:
+        """
+        plt.subplot(1, 2, 1)
+        self.draw_total_utility(show=False)
+        plt.subplot(1, 2, 2)
+        self.draw_marginal_utility(show=False)
+        plt.show()
