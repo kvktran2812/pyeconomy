@@ -85,3 +85,26 @@ def percentage_change(series, percentage=0):
     if percentage == 0:
         return series
     return [x+(x*percentage/100) for x in series]
+
+
+def percentage_relative_change(original_value, percentage=0, num=0):
+    """
+
+    :param original_value:
+    :param percentage:
+    :param num;
+    :return:
+    """
+    if num == 0:
+        raise ValueError("Number of value for the series is 0")
+    elif percentage == 0:
+        return np.repeat(original_value, num)
+    else:
+        arr = np.zeros(num)
+        arr[0] = original_value
+        i = 1
+
+        while i < num:
+            arr[i] = arr[i-1] + (arr[i-1] * percentage)
+            i += 1
+        return arr
