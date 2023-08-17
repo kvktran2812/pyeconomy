@@ -1,3 +1,3 @@
 # pyeconomy
 
-A fun project for economic simulation, recreation of economics models and studies.
+Project to create economy models and economic iteraction, relationships between each sectors. Calculate how a policy will affect the economy in general
