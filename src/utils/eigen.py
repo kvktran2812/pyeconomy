@@ -5,8 +5,14 @@ import scipy.linalg
 
 def eigen_decomposition(A):
     """
-    Compute diagonalizable matrices of A
-    A = PDP^(-1)
+    Compute diagonalized matrix of A
+    A = P D P_inv
+
+    Args:
+        A (np.array): Matrix A that will be diagonalized
+
+    Returns:
+        tuple of 3 np.array: P, D, P_inv (P inversed)
     """
     eigen_values, eigen_vectors = scipy.linalg.eig(A)
     P = eigen_vectors
@@ -16,6 +22,16 @@ def eigen_decomposition(A):
     return P, D, P_inv
 
 def spectral(A):
+    """
+    Compute diagonalized matrix of A in spectral theorem when A is symetric
+    A = U D U.T
+
+    Args:
+        A (np.array): Matrix A that will be diagonalized (must be symetric)
+
+    Returns:
+        tuple of 3 np.array: U, D, U.T (U transpose)
+    """
     eigen_values, eigen_vectors = scipy.linalg.eig(A)
     U = eigen_vectors
     D = np.diag(eigen_values)
