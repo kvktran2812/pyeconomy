@@ -3,3 +3,5 @@ venv/
 docs/
 .coverage
 tests/htmlcov
+__pycache__
+pytest.ini
